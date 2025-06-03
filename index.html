@@ -22,7 +22,7 @@
             margin: 0;
         }
         </style>
-        <title></title>
+        <title>90 PIC RECEM Valles</title>
     </head>
     <body>
         <div id="map">
@@ -47,9 +47,24 @@
         <script src="data/Atajados_4.js"></script>
         <script src="data/Comunidadesseleccionadasconatajados_5.js"></script>
         <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString' || e.target.feature.geometry.type === 'MultiLineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+        }
         var map = L.map('map', {
             zoomControl:false, maxZoom:28, minZoom:1
-        }).fitBounds([[-22.209236526489285,-68.66739006042482],[-17.009128189086915,-61.73391227722166]]);
+        }).fitBounds([[-22.209236526489285,-68.4715835119177],[-17.009128189086915,-61.92971882572879]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -81,6 +96,31 @@
 				popup._contentNode.classList.remove('media');
 			}
 		}
+        var title = new L.Control({'position':'topright'});
+        title.onAdd = function (map) {
+            this._div = L.DomUtil.create('div', 'info');
+            this.update();
+            return this._div;
+        };
+        title.update = function () {
+            this._div.innerHTML = '<h2>90 PIC RECEM Valles</h2>';
+        };
+        title.addTo(map);
+        var abstract = new L.Control({'position':'bottomleft'});
+        abstract.onAdd = function (map) {
+            this._div = L.DomUtil.create('div',
+            'leaflet-control abstract');
+            this._div.id = 'abstract'
+
+                abstract.show();
+                return this._div;
+            };
+            abstract.show = function () {
+                this._div.classList.remove("abstract");
+                this._div.classList.add("abstractUncollapsed");
+                this._div.innerHTML = 'Se muestra las 90 PIC del proyecto RECEM Valles diferenciadas por las que cuentan y no con atajados. Puede activar y desactivar capas con el panel de la parte superior derecha.';
+        };
+        abstract.addTo(map);
         var zoomControl = L.control.zoom({
             position: 'topleft'
         }).addTo(map);
@@ -114,7 +154,7 @@
         map.getPane('pane_OSMStandard_1').style.zIndex = 401;
         var layer_OSMStandard_1 = L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             pane: 'pane_OSMStandard_1',
-            opacity: 0.7,
+            opacity: 0.6,
             attribution: '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors, CC-BY-SA</a>',
             minZoom: 1,
             maxZoom: 28,
@@ -124,6 +164,16 @@
         layer_OSMStandard_1;
         map.addLayer(layer_OSMStandard_1);
         function pop_Lmitedepartamentalreferencial_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (var i in e.target._eventParents) {
+                        if (typeof e.target._eventParents[i].resetStyle === 'function') {
+                            e.target._eventParents[i].resetStyle(e.target);
+                        }
+                    }
+                },
+                mouseover: highlightFeature,
+            });
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">OBJECTID</th>\
@@ -171,6 +221,16 @@
         bounds_group.addLayer(layer_Lmitedepartamentalreferencial_2);
         map.addLayer(layer_Lmitedepartamentalreferencial_2);
         function pop_MunicipiosRECEMValles_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (var i in e.target._eventParents) {
+                        if (typeof e.target._eventParents[i].resetStyle === 'function') {
+                            e.target._eventParents[i].resetStyle(e.target);
+                        }
+                    }
+                },
+                mouseover: highlightFeature,
+            });
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">C_UT</th>\
@@ -216,7 +276,7 @@
                 fill: true,
                 fillOpacity: 1,
                 fillColor: 'rgba(255,249,229,0.6741176470588236)',
-                interactive: true,
+                interactive: false,
             }
         }
         map.createPane('pane_MunicipiosRECEMValles_3');
@@ -224,7 +284,7 @@
         map.getPane('pane_MunicipiosRECEMValles_3').style['mix-blend-mode'] = 'normal';
         var layer_MunicipiosRECEMValles_3 = new L.geoJson(json_MunicipiosRECEMValles_3, {
             attribution: '',
-            interactive: true,
+            interactive: false,
             dataVar: 'json_MunicipiosRECEMValles_3',
             layerName: 'layer_MunicipiosRECEMValles_3',
             pane: 'pane_MunicipiosRECEMValles_3',
@@ -234,30 +294,34 @@
         bounds_group.addLayer(layer_MunicipiosRECEMValles_3);
         map.addLayer(layer_MunicipiosRECEMValles_3);
         function pop_Atajados_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (var i in e.target._eventParents) {
+                        if (typeof e.target._eventParents[i].resetStyle === 'function') {
+                            e.target._eventParents[i].resetStyle(e.target);
+                        }
+                    }
+                },
+                mouseover: highlightFeature,
+            });
             var popupContent = '<table>\
                     <tr>\
-                        <th scope="row">municipio</th>\
-                        <td class="visible-with-data" id="municipio">' + (feature.properties['municipio'] !== null ? autolinker.link(String(feature.properties['municipio']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['municipio'] !== null ? autolinker.link(String(feature.properties['municipio']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">comunidad</th>\
-                        <td class="visible-with-data" id="comunidad">' + (feature.properties['comunidad'] !== null ? autolinker.link(String(feature.properties['comunidad']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['comunidad'] !== null ? autolinker.link(String(feature.properties['comunidad']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">cod_comunidad</th>\
-                        <td class="visible-with-data" id="cod_comunidad">' + (feature.properties['cod_comunidad'] !== null ? autolinker.link(String(feature.properties['cod_comunidad']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['cod_comunidad'] !== null ? autolinker.link(String(feature.properties['cod_comunidad']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">latitud</th>\
-                        <td class="visible-with-data" id="latitud">' + (feature.properties['latitud'] !== null ? autolinker.link(String(feature.properties['latitud']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['latitud'] !== null ? autolinker.link(String(feature.properties['latitud']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">longitud</th>\
-                        <td class="visible-with-data" id="longitud">' + (feature.properties['longitud'] !== null ? autolinker.link(String(feature.properties['longitud']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['longitud'] !== null ? autolinker.link(String(feature.properties['longitud']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">dimension_m2</th>\
-                        <td class="visible-with-data" id="dimension_m2">' + (feature.properties['dimension_m2'] !== null ? autolinker.link(String(feature.properties['dimension_m2']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['dimension_m2'] !== null ? autolinker.link(String(feature.properties['dimension_m2']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
@@ -353,6 +417,16 @@
         });
         bounds_group.addLayer(layer_Atajados_4);
         function pop_Comunidadesseleccionadasconatajados_5(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (var i in e.target._eventParents) {
+                        if (typeof e.target._eventParents[i].resetStyle === 'function') {
+                            e.target._eventParents[i].resetStyle(e.target);
+                        }
+                    }
+                },
+                mouseover: highlightFeature,
+            });
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">username</th>\
@@ -822,10 +896,10 @@
               i++;
         });
         map.addControl(new L.Control.Search({
-            layer: layer_MunicipiosRECEMValles_3,
+            layer: layer_Comunidadesseleccionadasconatajados_5,
             initial: false,
             hideMarkerOnCollapse: true,
-            propertyName: 'MUNICIPIO'}));
+            propertyName: 'Escriba el nombre de la comunidad visitada'}));
         document.getElementsByClassName('search-button')[0].className +=
          ' fa fa-binoculars';
         resetLabels([layer_Lmitedepartamentalreferencial_2,layer_MunicipiosRECEMValles_3,layer_Comunidadesseleccionadasconatajados_5]);
